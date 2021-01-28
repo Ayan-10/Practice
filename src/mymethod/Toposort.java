@@ -63,8 +63,9 @@ public class Toposort {
             if (visited[i] == false)
                 topologicalSortUtil(list,i, visited, stack);
             int i=0;
-        while (stack.empty() == false){
+        while (!stack.empty()){
             res[i]= stack.pop();
+            i++;
         }
         return res;
     }
