@@ -16,11 +16,11 @@ public class Toposort {
             for (int i=0; i<V+1; i++){
                 list.add(i,new ArrayList<Integer>());
             }
-            String s[] = reader.readLine().trim().split("\\s+");
-            int p =0;
+           // int p =0;
             for (int i=1; i<=E; i++){
-                int u = Integer.parseInt(s[p++]);
-                int v = Integer.parseInt(s[p++]);
+                String s[] = reader.readLine().trim().split("\\s+");
+                int u = Integer.parseInt(s[0]);
+                int v = Integer.parseInt(s[1]);
                 list.get(u).add(v);
             }
             int[] res = toposort(list,V);
