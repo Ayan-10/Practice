@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class DetectCycle {
+    final static int WHITE = 0, GRAY = 1, BLACK = 2;
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int t = Integer.parseInt(reader.readLine());
@@ -17,7 +18,7 @@ public class DetectCycle {
             for (int i = 0; i < V + 1; i++) {
                 list.add(i, new ArrayList<>());
             }
-            int p = 0;
+
             for (int i = 0; i <E; i++) {
                 String s[] = reader.readLine().trim().split("\\s+");
                 int u = Integer.parseInt(s[0]);
@@ -34,35 +35,34 @@ public class DetectCycle {
     }
 
     private static boolean isCyclic(int v, ArrayList<ArrayList<Integer>> list) {
-    boolean b[] = new boolean[v];
-    boolean f = false;
-    for (int i=0; i<v; i++){
-        b[i]=true;
-        for (int j=0; j<list.get(i).size(); j++){
-            ArrayList<Integer> a = list.get(i);
-            f=cyclictill(list, b , a.get(j));
-            if(f){
-                return true;
+        int[] color = new int[v];
+        for (int i = 0; i < v; i++)
+        {
+            color[i] = WHITE;
+        }
+        for (int i = 0; i < v; i++)
+        {
+            if (color[i] == WHITE)
+            {
+                if(cyclictill(list, i, color))
+                    return true;
             }
         }
-        b[i]=false;
-    }
-    return false;
+        return false;
     }
 
-    private static boolean cyclictill(ArrayList<ArrayList<Integer>> list, boolean[] b, int i) {
-    if(b[i]==true){
-        return true;
-    }
-    b[i]=true;
-    boolean f = false;
-    for (int j=0; j<list.get(i).size(); j++){
-        ArrayList<Integer> a = list.get(i);
-        f = cyclictill(list,b,a.get(j));
-        if(f){
-            return true;
+    private static boolean cyclictill(ArrayList<ArrayList<Integer>> list, int i, int[] color) {
+        color[i] = GRAY;
+        for (Integer in : list.get(i) )
+        {
+            if (color[in] == GRAY)
+                return true;
+
+            if (color[in] == WHITE && cyclictill(list, in, color))
+                return true;
         }
-    }
-    return false;
+
+        color[i] = BLACK;
+        return false;
     }
 }
