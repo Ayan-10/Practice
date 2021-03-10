@@ -11,6 +11,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
+        //buffer
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int t = Integer.parseInt(reader.readLine());
         while (t-- > 0) {
