@@ -25,7 +25,7 @@ public class fau {
 //////           if(!a.contains(s.charAt(i))){
 //////
 //////               a.add( s.charAt(i));
-//////           }
+//////           } fau fau
 //////       }
 //////       //a.forEach(System.out :: print);
 //////        a.stream().forEach((s1) -> System.out.print(s1 + " "));
