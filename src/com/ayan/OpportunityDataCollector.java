@@ -12,10 +12,10 @@ public class OpportunityDataCollector {
      * can be collected, and the route must start and end at the same branch.
      */
     public static int minEdgesToCollectData(
-            int[] opportunityData,
+            List<Integer> opportunityData,
             int branchNodes,
-            int[] branchFrom,
-            int[] branchTo
+            List<Integer> branchFrom,
+            List<Integer> branchTo
     ) {
         if (branchNodes <= 1) {
             return 0;
@@ -27,21 +27,22 @@ public class OpportunityDataCollector {
         }
 
         int[] degree = new int[branchNodes];
-        for (int i = 0; i < branchNodes - 1; i++) {
-            int u = branchFrom[i];
-            int v = branchTo[i];
+        int edgeCount = branchFrom.size();
+        for (int i = 0; i < edgeCount; i++) {
+            int u = branchFrom.get(i);
+            int v = branchTo.get(i);
             network.get(u).add(v);
             network.get(v).add(u);
             degree[u]++;
             degree[v]++;
         }
 
-        int remainingEdges = branchNodes - 1;
+        int remainingEdges = edgeCount;
 
         // Phase 1: Remove leaf branches that do not contain required data.
         ArrayDeque<Integer> trimQueue = new ArrayDeque<>();
         for (int node = 0; node < branchNodes; node++) {
-            if (degree[node] == 1 && opportunityData[node] == 0) {
+            if (degree[node] == 1 && opportunityData.get(node) == 0) {
                 trimQueue.offer(node);
             }
         }
@@ -60,7 +61,7 @@ public class OpportunityDataCollector {
 
                 degree[neighbor]--;
                 remainingEdges--;
-                if (degree[neighbor] == 1 && opportunityData[neighbor] == 0) {
+                if (degree[neighbor] == 1 && opportunityData.get(neighbor) == 0) {
                     trimQueue.offer(neighbor);
                 }
                 break;
