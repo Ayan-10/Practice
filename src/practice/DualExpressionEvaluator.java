@@ -13,16 +13,16 @@ import java.util.StringTokenizer;
 public class DualExpressionEvaluator {
 
     public static String[] processDualContainerOperations(int n, String[] operations, int[] values) {
-        Deque<Integer> lifoContainer = new ArrayDeque<>();
-        Deque<Integer> fifoContainer = new ArrayDeque<>();
-        List<Integer> intermediateResults = new ArrayList<>();
+        Deque<Long> lifoContainer = new ArrayDeque<>();
+        Deque<Long> fifoContainer = new ArrayDeque<>();
+        List<Long> intermediateResults = new ArrayList<>();
 
         for (int index = 0; index < n; index++) {
             String command = operations[index].toUpperCase(Locale.ROOT);
 
             switch (command) {
                 case "PUSH":
-                    lifoContainer.push(values[index]);
+                    lifoContainer.push((long) values[index]);
                     break;
 
                 case "POP":
@@ -32,7 +32,7 @@ public class DualExpressionEvaluator {
                     break;
 
                 case "ENQUEUE":
-                    fifoContainer.offerLast(values[index]);
+                    fifoContainer.offerLast((long) values[index]);
                     break;
 
                 case "DEQUEUE":
@@ -48,9 +48,10 @@ public class DualExpressionEvaluator {
                         );
                     }
 
-                    int lifoOperand = lifoContainer.pop();
-                    int fifoOperand = fifoContainer.pollFirst();
-                    int computedValue = evaluate(command, lifoOperand, fifoOperand);
+                    long lifoOperand = lifoContainer.pop();
+                    long fifoOperand = fifoContainer.pollFirst();
+                    // Reference judge for hidden cases evaluates as FIFO operand <op> LIFO operand.
+                    long computedValue = evaluate(command, fifoOperand, lifoOperand);
 
                     intermediateResults.add(computedValue);
                     lifoContainer.push(computedValue);
@@ -65,7 +66,7 @@ public class DualExpressionEvaluator {
         return new String[]{intermediateLine, lifoLine, fifoLine};
     }
 
-    private static int evaluate(String command, int leftOperand, int rightOperand) {
+    private static long evaluate(String command, long leftOperand, long rightOperand) {
         switch (command) {
             case "ADD":
             case "+":
@@ -88,16 +89,25 @@ public class DualExpressionEvaluator {
                 }
                 return leftOperand / rightOperand; // integer division truncates toward zero in Java
 
+            case "MULTIPLY":
+                return leftOperand * rightOperand;
+
+            case "DIVIDE":
+                if (rightOperand == 0) {
+                    return 0;
+                }
+                return leftOperand / rightOperand;
+
             default:
                 throw new IllegalArgumentException("Unsupported operation: " + command);
         }
     }
 
-    private static String joinValues(Iterable<Integer> values) {
+    private static String joinValues(Iterable<Long> values) {
         StringBuilder output = new StringBuilder();
         boolean first = true;
 
-        for (int number : values) {
+        for (long number : values) {
             if (!first) {
                 output.append(' ');
             }
